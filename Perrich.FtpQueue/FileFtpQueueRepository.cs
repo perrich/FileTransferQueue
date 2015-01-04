@@ -1,40 +1,45 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 
 namespace Perrich.FtpQueue
 {
     /// <summary>
-    /// Save the queue in a local file
+    /// Save the queue in a local file (using a JSON serialization).
+    /// Filename is named as "xxx.queue" with xxx as queue name.
     /// </summary>
     public class FileFtpQueueRepository : IFtpQueueRepository
     {
-        private readonly string fullPath;
+        private readonly string directory;
+
+        private static readonly Regex RejectedFilenameCharRegexRegex = new Regex("[?|%|*|:|\\||\"|/|\\]", RegexOptions.Compiled);
         
         /// <summary>
-        /// Define a repository using the file provided with its full path
+        /// Define a repository using the provided directory
         /// </summary>
-        /// <param name="fullPath"></param>
-        public FileFtpQueueRepository(string fullPath)
+        /// <param name="directory"></param>
+        public FileFtpQueueRepository(string directory)
         {
-            this.fullPath = fullPath;
+            this.directory = directory;
         }
 
         public void Save(FtpQueue queue)
         {
             var str = JsonConvert.SerializeObject(queue.FlushItems());
 
-            using (var writer = new StreamWriter(fullPath))
+            using (var writer = new StreamWriter(GetFullPath(queue.Name)))
             {
                 writer.Write(str);
             }
         }
 
-        public void Load(FtpQueue queue)
+        public FtpQueue Load(string name)
         {
+            var queue = new FtpQueue { Name = name };
             string str;
 
-            using (var reader = new StreamReader(fullPath))
+            using (var reader = new StreamReader(GetFullPath(name)))
             {
                 str = reader.ReadToEnd();
             }
@@ -44,6 +49,13 @@ namespace Perrich.FtpQueue
             {
                 queue.Enqueue(item);
             }
+
+            return queue;
+        }
+
+        private string GetFullPath(string name)
+        {
+            return Path.Combine(directory, RejectedFilenameCharRegexRegex.Replace(name, "") + ".queue");
         }
     }
 }

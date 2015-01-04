@@ -2,32 +2,46 @@
 
 namespace Perrich.FtpQueue
 {
+    /// <summary>
+    /// Manage an FTP Queue
+    /// </summary>
     public class FtpQueueManager
     {
-        private readonly FtpQueue ftpQueue;
+        private FtpQueue ftpQueue;
+        private readonly string queueName;
         private readonly IFtpQueueRepository queueRepository;
         private readonly IFileRepository repository;
         private readonly ISendingProvider provider;
 
-        public FtpQueueManager(FtpQueue ftpQueue, IFtpQueueRepository queueRepository, IFileRepository repository, ISendingProvider provider)
+        public FtpQueueManager(string queueName, IFtpQueueRepository queueRepository, IFileRepository repository, ISendingProvider provider)
         {
-            this.ftpQueue = ftpQueue;
+            this.queueName = queueName;
+            this.ftpQueue = new FtpQueue { Name = queueName };
             this.queueRepository = queueRepository;
             this.repository = repository;
             this.provider = provider;
         }
 
+        /// <summary>
+        /// Initialize the manager
+        /// </summary>
         public void Init()
         {
-            queueRepository.Load(ftpQueue);
+            ftpQueue = queueRepository.Load(queueName);
         }
 
+        /// <summary>
+        /// Initialize the manager and apply sending the currently queued items
+        /// </summary>
         public void InitAndApply()
         {
             Init();
             ApplyQueue();
         }
 
+        /// <summary>
+        /// Apply sending of currently queued items
+        /// </summary>
         public void ApplyQueue()
         {
             foreach (var item in ftpQueue.FlushItems())
@@ -43,12 +57,18 @@ namespace Perrich.FtpQueue
             }
         }
 
+        /// <summary>
+        /// Apply the sending and save queued items
+        /// </summary>
         public void ApplyAndSave()
         {
             ApplyQueue();
             Save();
         }
 
+        /// <summary>
+        /// Save the queued items
+        /// </summary>
         public void Save()
         {
             queueRepository.Save(ftpQueue);
@@ -70,7 +90,7 @@ namespace Perrich.FtpQueue
         }
 
         /// <summary>
-        /// Try to send a file
+        /// Try to send a stream
         /// </summary>
         /// <param name="stream">The stream to save</param>
         /// <param name="destPath">The remote path</param>

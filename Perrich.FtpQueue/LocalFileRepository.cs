@@ -5,6 +5,10 @@ using System.Text;
 
 namespace Perrich.FtpQueue
 {
+    /// <summary>
+    /// Implementation of a local file respository.
+    /// All files will be saved with a unique identifier in a single directory
+    /// </summary>
     public class LocalFileRepository : IFileRepository
     {
         private readonly string dirPath;

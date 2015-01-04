@@ -3,7 +3,7 @@
 namespace Perrich.FtpQueue
 {
     /// <summary>
-    /// Repository to save not sent file
+    /// Repository to save not sent files
     /// </summary>
     public interface IFileRepository
     {

@@ -12,6 +12,8 @@ namespace Perrich.FtpQueue
 
         private readonly object syncObj = new object();
 
+        public string Name { get; set; }
+
         /// <summary>
         /// Add an item into the queue
         /// </summary>

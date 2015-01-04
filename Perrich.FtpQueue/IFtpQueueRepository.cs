@@ -12,9 +12,10 @@ namespace Perrich.FtpQueue
         void Save(FtpQueue queue);
         
         /// <summary>
-        /// Load into the provided queue
+        /// Load the queue
         /// </summary>
-        /// <param name="queue"></param>
-        void Load(FtpQueue queue);
+        /// <param name="name">The name of the queue</param>
+        /// <returns></returns>
+        FtpQueue Load(string name);
     }
 }
