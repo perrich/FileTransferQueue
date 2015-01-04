@@ -1,0 +1,25 @@
+First time:
+1. Download nuget from http://nuget.codeplex.com
+2. Set the API-key by "NuGet SetApiKey 93e671c5-1154-456e-8e20-5d117b4828e8"
+3. Create subdirectories: lib and content
+
+To create an update
+1. Update NuGet to the latest version using "NuGet Update -self"
+2. Change the version number in edtFTPnetPRO.dll.nuspec
+3. Copy edtFTPnetPRO.dll into lib and edtFTPnetPRO.xml, copyright.txt and license.txt into content
+4. Execute the command "nuget pack edtFTPnetPRO.dll.nuspec"
+
+To upload the update:
+1. Execute the command "nuget push edtFTPnet-PRO.?.?.?.nupkg"
+
+
+Structure:
+
+/nuget
+  edtFTPnetPRO.dll.nuspec
+  /lib
+    edtFTPnetPRO.dll
+  /content
+    edtFTPnetPRO.dll.xml
+    license.txt
+    copyright.txt

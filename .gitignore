@@ -1,0 +1,14 @@
+/.hgignore
+
+/*.suo
+
+/*.user
+
+/.hg/*
+
+*/obj/*
+
+*/bin/*
+
+.sonar
+/TestResults

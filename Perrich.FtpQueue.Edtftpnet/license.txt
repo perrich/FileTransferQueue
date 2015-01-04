@@ -1,0 +1,64 @@
+‘edtFTPnet/Pro’ Software License Agreement
+We Enterprise Distributed Technologies Ltd grant you license to use this Software on the following terms:
+1.License and support
+1.1.This Software is licensed and not sold to you.  Your use of this Software is governed solely by the terms of this License.  This License is personal to you.
+1.2.This Software is owned by us, save for certain elements of it which are owned by the KPD-Team, and other elements  which are owned by Chew Keong Tan, and other elements which are owned by Routrek Networks, Inc., and other elements which are owned by ComponentAce.  This Software is protected by copyright law, and the owners reserve ownership of all Intellectual Property Rights in it, and all rights other than those expressly granted by this Agreement.  
+1.3.You must take reasonable steps to protect the Software from unauthorised copying, publication, disclosure or distribution.  
+1.4.Technical support is available via email for 12 months after the date of purchase (or for the lifetime of the product if a Lifetime Subscription is purchased). EDT will endeavour to respond to queries as soon as possible, but cannot guarantee a response within any particular time frame. Note that if in our opinion excessive use is being made of technical support, an additional payment will be required.
+1.5.Where use is permitted by this License, such use includes 
+1.5.1.the making of no more than a reasonable number of backup copies of the Software;  and
+1.5.2.the right to utilise and make prints for your own personal use (but not otherwise copy) any instructional and/or operational manuals relating to the Software.
+2.Evaluation License
+Until and unless you buy a License for the use of the Software:
+2.1.Your rights are limited to 
+2.1.1.use of one copy of the object code of the software only, and 
+2.1.2.use for evaluation purposes only, and
+2.1.3.use for 30 days following first installation only;  thereafter, your rights to use the Software terminate, and you must destroy all copies of the Software in your possession, unless you buy a License.
+2.2.You may not distribute any application created by you incorporating the Software, and you may not use any application created by you incorporating the Software other than to evaluate the Software.
+2.3.You may not modify the Software.  You may not disassemble, decompile, or reverse engineer the Software, or otherwise attempt to discover the source code of the Software.
+3.Development License
+Subject to payment of the Development License fee:
+3.1.In the case of an Individual Developer License, we grant to you a non-transferable and non-exclusive license to install this Software for use on one (single user) development machine (and also on any number of test and production machines - see section 3.4). 
+3.2.In the case of a Team Development License, we grant to you a non-transferable and non-exclusive license to install multiple copies of this Software on multiple development machines for use by any number of software developers who are part of the same organizational development team. The team may work on multiple projects and be dispersed across multiple geographic development sites. This license does not permit use by separate groups that do not operate a single, cohesive unit. 
+3.3.In the case of an Enterprise Development License, we grant to you a non-transferable and non-exclusive license to install multiple copies of this Software on multiple development machines. The software may be be used within multiple development teams anywhere within your company, irrespective of geographical location.
+3.4.Every Development License permits the installation of the Software on test machines and production machines. The Software may also be installed on machines for the purpose of automatic builds. 
+3.5.You may incorporate the Software in applications you create, provided such applications consist of substantially more than the Software.
+3.6.You may not modify the Software. You may not disassemble, decompile, or reverse engineer the Software, or otherwise attempt to discover the source code of the Software.
+3.7.You may use, distribute, license, and sell applications you have created which incorporate the Software. 
+3.8.You must incorporate the following disclaimer in the documentation and/or other materials provided with any distributed application you create which incorporates the Software:
+THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL ANY PERSON WHO HAS CONTRIBUTED TO OR IS THE OWNER OF ANY PART OF THIS SOFTWARE BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+4.You may not use the names of The KPD-Team, nor of Mentalis, nor of Routrek or Routrek Networks, nor of ComponentAce nor of any of the named groups' contritubers to endorse or promote products derived from the Software without specific prior written permission.
+5.Source License
+5.1.Subject to payment of the Source License fee, the terms of the above Development License shall apply, but you may also modify the source code of the Software and generate object code from the modified source code.  EDT will not provide technical support for Software that has been modified.
+5.2.You may not copy, rent, lease, assign or otherwise distribute or part with the source code of the Software.
+5.3.You must retain in the source code any copyright notice therein.
+
+6.Copyright Notice
+6.1.You must include copyright notices in any application you create which incorporates the Software immediately following each occurrence of your own copyright notice, in the following form:
+Parts of this software Copyright © 2004 Enterprise Distributed Technologies Ltd  All Rights Reserved.
+
+Parts of this software Copyright © 2002-2003, The KPD-Team.  All Rights Reserved  
+
+Parts of this software Copyright © 2002-2003, Routrek Networks, Inc.  All Rights Reserved  
+
+Parts of this software Copyright © 2002, Chew Keong Tan.  All Rights Reserved
+Parts of this software Copyright © 2006, ComponentAce.  All Rights Reserved
+6.2.You must include the file copyright.txt in any application you create which incorporates the Software.
+
+7.Warranties, and Limitation of Liability:
+7.1.You acknowledge that 
+7.1.1.you have had the opportunity to evaluate the Software without charge, and that you have satisfied yourself that it meets your requirements in all material respects
+7.1.2.it is not technically practicable to guarantee software to be error-free, and you agree that if any such errors are found to exist they shall not constitute a breach of this Agreement
+7.1.3.the Software is provided for use by you as an expert, and that where you decide to incorporate the Software in an application created by you, it is solely your responsibility to carry out all appropriate testing and to determine its suitability for your intended purpose.  You will therefore indemnify us against any and all claims that may be brought by a third party in relation to any applications distributed by you which incorporate the Software, whether or not the terms of the License you have bought permit such distribution.
+7.2.THE SOFTWARE IS NOT WARRANTED TO BE FAULT-TOLERANT, AND IS NOT INTENDED FOR THE DESIGN, CONSTRUCTION, MAINTENANCE, OPERATION, CONTROL, OR ANY OTHER USE IN CONNECTION WITH HIGH RISK SYSTEMS. WE SPECIFICALLY DISCLAIM ANY EXPRESS OR IMPLIED WARRANTY OF FITNESS FOR PURPOSE IN CONNECTION WITH HIGH RISK SYSTEMS. ‘High Risk Systems’ means systems in environments requiring fail-safe performance (such as nuclear facilities, aircraft navigation or communication systems, air traffic control, direct life support machines, or weapons systems), in which the failure of the software could lead directly to death, personal injury, or severe physical or environmental damage. You agree that you will not use the software for any purpose in connection with High Risk Systems.
+7.3.THIS SOFTWARE IS PROVIDED ``AS IS'', AND TO THE EXTENT PERMITTED BY THE APPLICABLE LAW, WE DISCLAIM ALL WARRANTIES WITH RESPECT TO THE SOFTWARE, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR ANY PARTICULAR PURPOSE.
+7.4.ALTHOUGH WE DO NOT WARRANT THAT THE SOFTWARE SUPPLIED HEREUNDER SHALL BE FREE FROM ALL KNOWN VIRUSES WE HAVE USED COMMERCIALLY REASONABLE EFFORTS TO CHECK FOR THE MOST COMMONLY KNOWN VIRUSES.  YOU ARE NEVERTHELESS SOLELY RESPONSIBLE FOR VIRUS SCANNING THE SOFTWARE.
+7.5.WE SHALL NOT BE LIABLE TO YOU OR TO ANYONE ELSE FOR ANY LOSS OR DAMAGE WHATSOEVER OR HOWSOEVER CAUSED ARISING DIRECTLY OR INDIRECTLY IN CONNECTION WITH THIS LICENSE, THE SOFTWARE, ITS USE OR OTHERWISE, EXCEPT TO THE EXTENT THAT SUCH LIABILITY MAY NOT BE LAWFULLY EXCLUDED UNDER THE APPLICABLE LAW.
+7.6.NOTWITHSTANDING THE GENERALITY OF THE ABOVE, IN NO EVENT WILL WE BE LIABLE FOR INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL LOSS OR DAMAGE WHICH MAY ARISE IN RESPECT OF THE SOFTWARE, ITS USE, OR IN RESPECT OF OTHER EQUIPMENT OR PROPERTY, OR FOR LOSS OF PROFIT, BUSINESS, REVENUE, GOODWILL OR ANTICIPATED SAVINGS, EVEN IF WE HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH LOSS.  
+7.7.IF ANY EXCLUSION OR LIMITATION CONTAINED IN THIS LICENSE SHALL BE HELD TO BE INVALID FOR ANY REASON AND WE BECOME LIABLE FOR LOSS OR DAMAGE THAT MAY LAWFULLY BE LIMITED, SUCH LIABILITY SHALL BE LIMITED TO THE LICENSE FEE PAID BY YOU FOR THE SOFTWARE.  
+7.8.We do not exclude liability for death or personal injury to the extent only that it arises as a result of our negligence or that of our employees, agents or authorized representatives.
+7.9.So far as any parts of this Software which were not created by us are concerned, THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL ANY PERSON WHO HAS CONTRIBUTED TO OR IS THE OWNER OF ANY PART OF THIS SOFTWARE BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  This provision shall operate for the benefit of any and all such persons.
+8.Miscellaneous
+8.1.You acknowledge that these terms supersede all prior agreements, and are complete and exclusive.  No oral or written information given by us or on our behalf shall create a warranty or collateral contract, or in any way increase the scope of this warranty in any way, and you may not rely on any such advice.
+8.2.If any provision in this Agreement shall be determined to be invalid, such provision shall be deemed omitted;  the remainder of this Agreement shall stand.
+8.3.This License shall be governed by the laws of Australia.
