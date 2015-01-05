@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using log4net;
 using Newtonsoft.Json;
 
 namespace Perrich.FtpQueue
@@ -11,9 +12,11 @@ namespace Perrich.FtpQueue
     /// </summary>
     public class FileFtpQueueRepository : IFtpQueueRepository
     {
-        private readonly string directory;
+        private static readonly ILog Log = LogManager.GetLogger(typeof(FileFtpQueueRepository).FullName);
 
-        private static readonly Regex RejectedFilenameCharRegexRegex = new Regex("[?|%|*|:|\\||\"|/|\\]", RegexOptions.Compiled);
+        private static readonly Regex RejectedFilenameCharRegexRegex = new Regex("[?|%|*|:|\\||\"|/|\\\\]", RegexOptions.Compiled);
+
+        private readonly string directory;
         
         /// <summary>
         /// Define a repository using the provided directory
@@ -26,7 +29,7 @@ namespace Perrich.FtpQueue
 
         public void Save(FtpQueue queue)
         {
-            var str = JsonConvert.SerializeObject(queue.FlushItems());
+            var str = JsonConvert.SerializeObject(queue.FlushItems(), Formatting.None, new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Ignore });
 
             using (var writer = new StreamWriter(GetFullPath(queue.Name)))
             {
@@ -36,10 +39,18 @@ namespace Perrich.FtpQueue
 
         public FtpQueue Load(string name)
         {
-            var queue = new FtpQueue { Name = name };
+            var queue = new FtpQueue(name);
             string str;
 
-            using (var reader = new StreamReader(GetFullPath(name)))
+            var fullPath = GetFullPath(name);
+            if (!File.Exists(fullPath))
+            {
+                Log.WarnFormat("Queue {0} does not exists in a file named {1}", name, fullPath);
+
+                return queue;
+            }
+
+            using (var reader = new StreamReader(fullPath))
             {
                 str = reader.ReadToEnd();
             }

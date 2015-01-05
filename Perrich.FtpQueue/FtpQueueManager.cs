@@ -16,7 +16,7 @@ namespace Perrich.FtpQueue
         public FtpQueueManager(string queueName, IFtpQueueRepository queueRepository, IFileSystem system, ISendingProvider provider)
         {
             this.queueName = queueName;
-            this.ftpQueue = new FtpQueue { Name = queueName };
+            this.ftpQueue = new FtpQueue(queueName);
             this.queueRepository = queueRepository;
             this.system = system;
             this.provider = provider;

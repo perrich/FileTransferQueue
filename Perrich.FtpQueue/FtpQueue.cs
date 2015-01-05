@@ -12,7 +12,16 @@ namespace Perrich.FtpQueue
 
         private readonly object syncObj = new object();
 
-        public string Name { get; set; }
+        public string Name { get; private set; }
+
+        /// <summary>
+        /// Create an FTP Queue
+        /// </summary>
+        /// <param name="name"></param>
+        public FtpQueue(string name)
+        {
+            Name = name;
+        }
 
         /// <summary>
         /// Add an item into the queue
