@@ -10,15 +10,15 @@ namespace Perrich.FtpQueue
         private FtpQueue ftpQueue;
         private readonly string queueName;
         private readonly IFtpQueueRepository queueRepository;
-        private readonly IFileRepository repository;
+        private readonly IFileSystem system;
         private readonly ISendingProvider provider;
 
-        public FtpQueueManager(string queueName, IFtpQueueRepository queueRepository, IFileRepository repository, ISendingProvider provider)
+        public FtpQueueManager(string queueName, IFtpQueueRepository queueRepository, IFileSystem system, ISendingProvider provider)
         {
             this.queueName = queueName;
             this.ftpQueue = new FtpQueue { Name = queueName };
             this.queueRepository = queueRepository;
-            this.repository = repository;
+            this.system = system;
             this.provider = provider;
         }
 
@@ -52,7 +52,7 @@ namespace Perrich.FtpQueue
                 }
                 else
                 {
-                    TryToSend(repository.GetFile(item.Identifier), item.DestPath, item.Identifier);
+                    TryToSend(system.GetFile(item.Identifier), item.DestPath, item.Identifier);
                 }
             }
         }
@@ -104,7 +104,7 @@ namespace Perrich.FtpQueue
         {
             if (provider.Send(stream, destPath)) return true;
 
-            identifier = identifier ?? repository.SaveStream(stream);
+            identifier = identifier ?? system.SaveStream(stream);
             ftpQueue.Enqueue(new FtpItem { Identifier = identifier, DestPath = destPath });
             return false;
         }

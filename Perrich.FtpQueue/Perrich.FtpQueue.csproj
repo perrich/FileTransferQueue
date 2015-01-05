@@ -46,8 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IFileRepository.cs" />
-    <Compile Include="LocalFileRepository.cs" />
+    <Compile Include="FileSystemException.cs" />
+    <Compile Include="IFileSystem.cs" />
+    <Compile Include="LocalFileSystem.cs" />
     <Compile Include="FtpItem.cs" />
     <Compile Include="FtpQueueManager.cs" />
     <Compile Include="FtpQueue.cs" />
