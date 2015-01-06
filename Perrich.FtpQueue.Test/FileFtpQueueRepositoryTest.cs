@@ -5,13 +5,29 @@ namespace Perrich.FtpQueue.Test
 {
     public class FileFtpQueueRepositoryTest
     {
+        private string filename;
+        private FileFtpQueueRepository repository;
+
+        [SetUp]
+        public void Init()
+        {
+            repository = new FileFtpQueueRepository(".");
+        }
+
+        [TearDown]
+        public void Dispose()
+        {
+            if (filename != null && File.Exists(filename))
+                File.Delete(filename);
+        }
+
         [Test]
         public void ShouldInitializeAnEmptyQueueForNewerQueue()
         {
             const string queueName = "MySampleQueue";
-            var repo = new FileFtpQueueRepository(".");
-            File.Delete(GetFileName(queueName));
-            var queue = repo.Load(queueName);
+            filename = GetFileName(queueName);
+
+            var queue = repository.Load(queueName);
 
             Assert.AreEqual(0, queue.FlushItems().Count);
         }
@@ -20,16 +36,15 @@ namespace Perrich.FtpQueue.Test
         public void ShouldLoadAQueue()
         {
             const string queueName = "MySampleLoadQueue";
-            var filename = GetFileName(queueName);
+            filename = GetFileName(queueName);
 
-            var repo = new FileFtpQueueRepository(".");
-            File.Delete(filename);
             using (var w = File.CreateText(filename))
             {
                 w.WriteLine("[ { 'DestPath': './mySample.txt', 'SrcPath': 'mySample.txt' }, { 'DestPath': 'a.txt', 'Identifier': 'a' }, { 'DestPath': 'b.txt', 'Identifier': 'b' }]");
                 w.Close();
             }
-            var queue = repo.Load(queueName);
+
+            var queue = repository.Load(queueName);
 
             var item = queue.Dequeue();
             Assert.NotNull(item);
@@ -57,26 +72,29 @@ namespace Perrich.FtpQueue.Test
         public void ShouldSaveAQueue()
         {
             const string queueName = "MySampleSaveQueue";
-            var filename = GetFileName(queueName);
+            filename = GetFileName(queueName);
 
             var queue = new FtpQueue(queueName);
             queue.Enqueue(new FtpItem { DestPath = "./destfile.txt", SrcPath = "srcfile.txt" });
             queue.Enqueue(new FtpItem { DestPath = "./1.txt", Identifier = "1" });
             queue.Enqueue(new FtpItem { DestPath = "./1.txt", Identifier = "2" });
 
-            var repo = new FileFtpQueueRepository(".");
-            File.Delete(filename);
-            repo.Save(queue);
+            repository.Save(queue);
 
             Assert.AreEqual(0, queue.FlushItems().Count, "After a save, the queue should be empty");
             Assert.True(File.Exists(filename));
 
             Assert.AreEqual("[{\"SrcPath\":\"srcfile.txt\",\"DestPath\":\"./destfile.txt\"},{\"Identifier\":\"1\",\"DestPath\":\"./1.txt\"},{\"Identifier\":\"2\",\"DestPath\":\"./1.txt\"}]", File.ReadAllText(filename));
+            File.Delete(filename);
         }
 
         private static string GetFileName(string queueName)
         {
-            return queueName + ".queue";
+            var filename = queueName + ".queue";
+            if (File.Exists(filename))
+                File.Delete(filename);
+
+            return filename;
         }
     }
 }

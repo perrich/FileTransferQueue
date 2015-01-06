@@ -26,6 +26,6 @@ namespace Perrich.FtpQueue
         /// </summary>
         /// <param name="identifier">The unique identifier</param>
         /// <returns></returns>
-        Stream GetFile(string identifier);
+        Stream GetStream(string identifier);
     }
 }

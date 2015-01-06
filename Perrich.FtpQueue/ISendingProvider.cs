@@ -8,7 +8,8 @@ namespace Perrich.FtpQueue
     public interface ISendingProvider
     {
         /// <summary>
-        /// Send a file
+        /// Send a file. 
+        /// Do not throw exception
         /// </summary>
         /// <param name="srcStream">The stream to send</param>
         /// <param name="destPath">The remote path</param>

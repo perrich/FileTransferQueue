@@ -61,7 +61,7 @@ namespace Perrich.FtpQueue
             }
         }
 
-        public Stream GetFile(string identifier)
+        public Stream GetStream(string identifier)
         {
             var path = Path.Combine(dirPath, identifier);
 

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace Perrich.FtpQueue
 {
@@ -16,7 +17,7 @@ namespace Perrich.FtpQueue
         public FtpQueueManager(string queueName, IFtpQueueRepository queueRepository, IFileSystem system, ISendingProvider provider)
         {
             this.queueName = queueName;
-            this.ftpQueue = new FtpQueue(queueName);
+            ftpQueue = new FtpQueue(queueName);
             this.queueRepository = queueRepository;
             this.system = system;
             this.provider = provider;
@@ -46,13 +47,13 @@ namespace Perrich.FtpQueue
         {
             foreach (var item in ftpQueue.FlushItems())
             {
-                if (item.SrcPath == null)
+                if (item.SrcPath != null)
                 {
                     TryToSend(item.SrcPath, item.DestPath);
                 }
-                else
+                else if (item.Identifier != null)
                 {
-                    TryToSend(system.GetFile(item.Identifier), item.DestPath, item.Identifier);
+                    TryToSend(system.GetStream(item.Identifier), item.DestPath, item.Identifier);
                 }
             }
         }
@@ -82,8 +83,15 @@ namespace Perrich.FtpQueue
         /// <returns></returns>
         public bool TryToSend(string srcPath, string destPath)
         {
-            var stream = new FileStream(srcPath, FileMode.Open, FileAccess.Read);
-            if (provider.Send(stream, destPath)) return true;
+            if (string.IsNullOrEmpty(srcPath))
+                throw new ArgumentException("The source path should not be null or empty");
+            if (string.IsNullOrEmpty(destPath))
+                throw new ArgumentException("The destination path should not be null or empty");
+
+            using (var stream = new FileStream(srcPath, FileMode.Open, FileAccess.Read))
+            {
+                if (provider.Send(stream, destPath)) return true;
+            }
 
             ftpQueue.Enqueue(new FtpItem { SrcPath = srcPath, DestPath = destPath });
             return false;
@@ -97,12 +105,19 @@ namespace Perrich.FtpQueue
         /// <returns></returns>
         public bool TryToSend(Stream stream, string destPath)
         {
+            if (stream == null)
+                throw new ArgumentException("The stream should never be null");
+            if (string.IsNullOrEmpty(destPath))
+                throw new ArgumentException("The destination path should not be null or empty");
+
             return TryToSend(stream, destPath, null);
         }
 
         private bool TryToSend(Stream stream, string destPath, string identifier)
         {
             if (provider.Send(stream, destPath)) return true;
+
+            stream.Close();
 
             identifier = identifier ?? system.SaveStream(stream);
             ftpQueue.Enqueue(new FtpItem { Identifier = identifier, DestPath = destPath });
