@@ -32,7 +32,7 @@ namespace Perrich.FtpQueue
         }
 
         /// <summary>
-        /// Initialize the manager and apply sending the currently queued items
+        /// Initialize the manager and try to send the currently queued items
         /// </summary>
         public void InitAndApply()
         {
@@ -41,7 +41,7 @@ namespace Perrich.FtpQueue
         }
 
         /// <summary>
-        /// Apply sending of currently queued items
+        /// Try to send currently queued items
         /// </summary>
         public void ApplyQueue()
         {
@@ -59,7 +59,7 @@ namespace Perrich.FtpQueue
         }
 
         /// <summary>
-        /// Apply the sending and save queued items
+        /// Try to send currently queued items and save not sent items
         /// </summary>
         public void ApplyAndSave()
         {
