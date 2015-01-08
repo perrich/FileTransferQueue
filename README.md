@@ -12,10 +12,10 @@ The current version includes :
 Usage:
 
 ```csharp
-  var queueRepository = new FileFtpQueueRepository("yourconfigfolder");
-  var system = new LocalFileSystem("yourqueuedfilesfolder");
+  var queueRepository = new FileFtpQueueRepository("your config file folder");
+  var system = new LocalFileSystem("your queued files folder");
   var provider = new EdtftpnetSendingProvider(ftpConnexion);
-  var manager = new FtpQueueManager("MyQueue", queueRepository, system, provider);
+  var manager = new FtpQueueManager("your queue name", queueRepository, system, provider);
   
   manager.InitAndApply(); // load configuration and try to send previously queued items
   
