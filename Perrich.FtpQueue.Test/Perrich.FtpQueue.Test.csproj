@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LocalFileSystemTest.cs" />
     <Compile Include="FileFtpQueueRepositoryTest.cs" />
     <Compile Include="FtpQueueManagerTest.cs" />
     <Compile Include="FtpQueueTest.cs" />

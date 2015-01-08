@@ -45,7 +45,7 @@ namespace Perrich.FtpQueue
                 var fullPath = Convert.ToString(Guid.NewGuid().ToByteArray()) + ".stream"; // simulate a fullpath
                 var id = GetUniqueId(fullPath);
                 var path = Path.Combine(dirPath, id);
-                using (FileStream fileStream = File.Create(path))
+                using (var fileStream = File.Create(path))
                 {
                     stream.Seek(0, SeekOrigin.Begin);
                     stream.CopyTo(fileStream);
@@ -75,9 +75,9 @@ namespace Perrich.FtpQueue
         private static string GetUniqueId(string fullPath)
         {
             var sb = new StringBuilder();
-            using (var md5 = System.Security.Cryptography.MD5.Create(fullPath))
+            using (var md5 = System.Security.Cryptography.MD5.Create())
             {
-                foreach (var t in md5.Hash)
+                foreach (var t in md5.ComputeHash(new UTF8Encoding().GetBytes(fullPath)))
                 {
                     sb.Append(t.ToString("x2"));
                 }
@@ -85,7 +85,6 @@ namespace Perrich.FtpQueue
 
             sb.Append("-");
             sb.Append(DateTime.Now.Ticks.ToString("x"));
-            sb.Append(".");
             sb.Append(Path.GetExtension(fullPath));
 
             return sb.ToString();
