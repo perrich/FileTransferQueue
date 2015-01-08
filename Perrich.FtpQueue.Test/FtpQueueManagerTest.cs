@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using FakeItEasy;
 using NUnit.Framework;
 
@@ -61,7 +62,7 @@ namespace Perrich.FtpQueue.Test
         {
             manager.InitAndApply();
             A.CallTo(() => queueRepository.Load(QueueName)).MustHaveHappened(Repeated.Exactly.Once);
-            CheckQueueIsFullyApplied();
+            AssertQueueIsFullyApplied();
         }
 
         [Test]
@@ -69,7 +70,7 @@ namespace Perrich.FtpQueue.Test
         {
             manager.Init();
             manager.ApplyQueue();
-            CheckQueueIsFullyApplied();
+            AssertQueueIsFullyApplied();
         }
 
         [Test]
@@ -86,24 +87,24 @@ namespace Perrich.FtpQueue.Test
         {
             manager.Init();
             manager.ApplyAndSave();
-            CheckQueueIsFullyApplied();
+            AssertQueueIsFullyApplied();
             A.CallTo(() => queueRepository.Save(queue)).MustHaveHappened(Repeated.Exactly.Once);
         }
 
         [Test]
         public void ShouldEnqueueFileIfSendIsRejected()
         {
-            var queue = new FtpQueue(QueueName);
+            var q = new FtpQueue(QueueName);
 
             A.CallTo(() => provider.Send(A<Stream>.Ignored, A<string>.Ignored)).Returns(false);
-            A.CallTo(() => queueRepository.Load(QueueName)).Returns(queue);
+            A.CallTo(() => queueRepository.Load(QueueName)).Returns(q);
             manager.Init();
             manager.TryToSend(SrcFile1, DestFile1);
             A.CallTo(() => queueRepository.Load(QueueName)).MustHaveHappened(Repeated.Exactly.Once);
             A.CallTo(() => provider.Send(A<Stream>.Ignored, A<string>.Ignored)).MustHaveHappened(Repeated.Exactly.Once);
 
-            Assert.NotNull(queue);
-            var list = queue.FlushItems();
+            Assert.NotNull(q);
+            var list = q.FlushItems();
             Assert.AreEqual(1, list.Count);
             Assert.AreEqual(SrcFile1, list[0].SrcPath);
             Assert.AreEqual(DestFile1, list[0].DestPath);
@@ -112,10 +113,10 @@ namespace Perrich.FtpQueue.Test
         [Test]
         public void ShouldEnqueueStreamIfSendIsRejected()
         {
-            var queue = new FtpQueue(QueueName);
+            var q = new FtpQueue(QueueName);
 
             A.CallTo(() => provider.Send(A<Stream>.Ignored, A<string>.Ignored)).Returns(false);
-            A.CallTo(() => queueRepository.Load(QueueName)).Returns(queue);
+            A.CallTo(() => queueRepository.Load(QueueName)).Returns(q);
             A.CallTo(() => system.SaveStream(fakeStream)).Returns(Identifier1);
 
             manager.Init();
@@ -125,14 +126,38 @@ namespace Perrich.FtpQueue.Test
             A.CallTo(() => provider.Send(A<Stream>.Ignored, A<string>.Ignored)).MustHaveHappened(Repeated.Exactly.Once);
             A.CallTo(() => system.SaveStream(fakeStream)).MustHaveHappened(Repeated.Exactly.Once);
 
-            Assert.NotNull(queue);
-            var list = queue.FlushItems();
+            Assert.NotNull(q);
+            var list = q.FlushItems();
             Assert.AreEqual(1, list.Count);
             Assert.AreEqual(Identifier1, list[0].Identifier);
             Assert.AreEqual(DestFile1, list[0].DestPath);
         }
 
-        private void CheckQueueIsFullyApplied()
+
+        [Test]
+        public void ShouldManagerThrowExceptionIfSourceStreamIsNull()
+        {
+            Assert.Throws<ArgumentException>(() => manager.TryToSend((Stream)null, DestFile1));
+        }
+
+
+        [Test]
+        public void ShouldManagerThrowExceptionIfSourceFileIsNullOrEmpty()
+        {
+            Assert.Throws<ArgumentException>(() => manager.TryToSend((string)null, DestFile1));
+            Assert.Throws<ArgumentException>(() => manager.TryToSend(string.Empty, DestFile1));
+        }
+
+        [Test]
+        public void ShouldManagerThrowExceptionIfDestinationFileIsNullOrEmpty()
+        {
+            Assert.Throws<ArgumentException>(() => manager.TryToSend(SrcFile1, null));
+            Assert.Throws<ArgumentException>(() => manager.TryToSend(SrcFile1, string.Empty));
+            Assert.Throws<ArgumentException>(() => manager.TryToSend(fakeStream, null));
+            Assert.Throws<ArgumentException>(() => manager.TryToSend(fakeStream, string.Empty));
+        }
+
+        private void AssertQueueIsFullyApplied()
         {
             A.CallTo(() => system.GetStream(A<string>.Ignored)).MustHaveHappened(Repeated.Exactly.Twice);
             A.CallTo(() => system.GetStream(Identifier1)).MustHaveHappened(Repeated.Exactly.Once);
