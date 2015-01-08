@@ -14,6 +14,7 @@ namespace Perrich.FtpQueue
         {
             Read, 
             Write,
+            Delete,
         }
 
         /// <summary>

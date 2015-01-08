@@ -27,5 +27,12 @@ namespace Perrich.FtpQueue
         /// <param name="identifier">The unique identifier</param>
         /// <returns></returns>
         Stream GetStream(string identifier);
+
+        /// <summary>
+        /// Delete entry saved with the provided identifier
+        /// </summary>
+        /// <param name="identifier">The unique identifier</param>
+        /// <returns></returns>
+        void Delete(string identifier);
     }
 }

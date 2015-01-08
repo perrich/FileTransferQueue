@@ -69,7 +69,35 @@ namespace Perrich.FtpQueue
                 throw new FileSystemException(FileSystemException.ActionType.Read,
                     string.Format("The identifier \"{0}\" does not exists in the file system.", identifier));
 
-            return new FileStream(path, FileMode.Open, FileAccess.Read);
+            try
+            {
+                return new FileStream(path, FileMode.Open, FileAccess.Read);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(string.Format("Cannot read wanted stream using \"{0}\" as identifier", identifier), ex);
+                throw new FileSystemException(FileSystemException.ActionType.Read,
+                    "Cannot read the stream in the file system.");
+            }
+        }
+
+
+        public void Delete(string identifier)
+        {
+            var path = Path.Combine(dirPath, identifier);
+
+            if (!File.Exists(path))
+                return;
+
+            try
+            {
+                File.Delete(path);
+            }
+            catch (Exception ex)
+            {
+                throw new FileSystemException(FileSystemException.ActionType.Delete,
+                    string.Format("The entry with \"{0}\" as identifier cannot be deleted in the file system.", identifier));
+            }
         }
 
         private static string GetUniqueId(string fullPath)

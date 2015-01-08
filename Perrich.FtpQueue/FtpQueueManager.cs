@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using log4net;
 
 namespace Perrich.FtpQueue
 {
@@ -8,6 +9,8 @@ namespace Perrich.FtpQueue
     /// </summary>
     public class FtpQueueManager
     {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(FtpQueueManager).FullName);
+
         private FtpQueue ftpQueue;
         private readonly string queueName;
         private readonly IFtpQueueRepository queueRepository;
@@ -53,7 +56,20 @@ namespace Perrich.FtpQueue
                 }
                 else if (item.Identifier != null)
                 {
-                    TryToSend(system.GetStream(item.Identifier), item.DestPath, item.Identifier);
+                    try
+                    {
+                        var stream = system.GetStream(item.Identifier);
+                        var sended = TryToSend(stream, item.DestPath, item.Identifier);
+
+                        if (sended)
+                        {
+                            system.Delete(item.Identifier);
+                        }
+                    }
+                    catch (FileSystemException ex)
+                    {
+                        Log.Error(string.Format("Cannot send item with \"{0}\" as identifier", item.Identifier), ex);
+                    }
                 }
             }
         }

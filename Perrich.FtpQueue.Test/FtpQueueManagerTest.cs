@@ -166,6 +166,8 @@ namespace Perrich.FtpQueue.Test
             A.CallTo(() => provider.Send(A<Stream>.Ignored, DestFile1)).MustHaveHappened(Repeated.Exactly.Once);
             A.CallTo(() => provider.Send(fakeStream, DestFile2)).MustHaveHappened(Repeated.Exactly.Once);
             A.CallTo(() => provider.Send(fakeStream, DestFile3)).MustHaveHappened(Repeated.Exactly.Once);
+            A.CallTo(() => system.Delete(Identifier1)).MustHaveHappened(Repeated.Exactly.Once);
+            A.CallTo(() => system.Delete(Identifier2)).MustHaveHappened(Repeated.Exactly.Once);
         }
 
         private static void CreateFile(string filename)
