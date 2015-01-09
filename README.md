@@ -1,4 +1,4 @@
-FtpQueue
+FileTransferQueue
 ========
 
 A local Queue to handle transfer errors. First need was to manage FTP transfert issue but the API is open and you can manage any transfert protocol and persistance solution.
