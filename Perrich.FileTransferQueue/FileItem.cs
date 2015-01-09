@@ -1,10 +1,10 @@
 ﻿
-namespace Perrich.FtpQueue
+namespace Perrich.FileTransferQueue
 {
     /// <summary>
-    /// Define a File to be sent by FTP
+    /// Define a File to be transfered
     /// </summary>
-    public class FtpItem
+    public class FileItem
     {
         /// <summary>
         /// The source identifier in the repository

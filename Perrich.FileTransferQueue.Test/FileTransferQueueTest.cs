@@ -1,51 +1,51 @@
 ﻿using System;
 using NUnit.Framework;
 
-namespace Perrich.FtpQueue.Test
+namespace Perrich.FileTransferQueue.Test
 {
-    public class FtpQueueTest
+    public class FileTransferQueueTest
     {
         private const string QueueName = "MySampleQueue";
 
         [Test]
-        public void ShouldFtpQueueHasAName()
+        public void ShouldFileTransferQueueHasAName()
         {
-            var queue = new FtpQueue(QueueName);
+            var queue = new FileTransferQueue(QueueName);
             Assert.AreEqual(QueueName, queue.Name);
         }
 
         [Test]
         public void ShouldEmptyQueueReturnNullWhenDequeue()
         {
-            var queue = new FtpQueue(QueueName);
+            var queue = new FileTransferQueue(QueueName);
             Assert.Null(queue.Dequeue());
         }
 
         [Test]
         public void ShouldEmptyQueueReturnEmptyListWhenDequeue()
         {
-            var queue = new FtpQueue(QueueName);
+            var queue = new FileTransferQueue(QueueName);
             var list = queue.FlushItems();
             Assert.NotNull(list);
             Assert.AreEqual(0, list.Count);
         }
 
         [Test]
-        public void ShouldRetrieveEnqueuedFtpItem()
+        public void ShouldRetrieveEnqueuedFileItem()
         {
-            var queue = new FtpQueue(QueueName);
-            var item = new FtpItem {DestPath = "./1.txt", Identifier = "1"};
+            var queue = new FileTransferQueue(QueueName);
+            var item = new FileItem {DestPath = "./1.txt", Identifier = "1"};
             queue.Enqueue(item);
             Assert.AreSame(item, queue.Dequeue());
             Assert.Null(queue.Dequeue(), "Only one value was in the queue");
         }
 
         [Test]
-        public void ShouldRetrieveEnqueuedFtpItemsInTheSameOrder()
+        public void ShouldRetrieveEnqueuedFileItemsInTheSameOrder()
         {
-            var queue = new FtpQueue(QueueName);
-            var item = new FtpItem { DestPath = "./1.txt", Identifier = "1" };
-            var item2 = new FtpItem { DestPath = "./2.txt", Identifier = "2" };
+            var queue = new FileTransferQueue(QueueName);
+            var item = new FileItem { DestPath = "./1.txt", Identifier = "1" };
+            var item2 = new FileItem { DestPath = "./2.txt", Identifier = "2" };
             queue.Enqueue(item);
             queue.Enqueue(item2);
             Assert.AreSame(item, queue.Dequeue());
@@ -54,12 +54,12 @@ namespace Perrich.FtpQueue.Test
         }
 
         [Test]
-        public void ShouldListAllEnqueuedFtpItemsInTheSameOrder()
+        public void ShouldListAllEnqueuedFileItemsInTheSameOrder()
         {
-            var queue = new FtpQueue(QueueName);
-            var item = new FtpItem { DestPath = "./1.txt", Identifier = "1" };
-            var item2 = new FtpItem { DestPath = "./2.txt", Identifier = "2" };
-            var item3 = new FtpItem { DestPath = "./3.txt", Identifier = "3" };
+            var queue = new FileTransferQueue(QueueName);
+            var item = new FileItem { DestPath = "./1.txt", Identifier = "1" };
+            var item2 = new FileItem { DestPath = "./2.txt", Identifier = "2" };
+            var item3 = new FileItem { DestPath = "./3.txt", Identifier = "3" };
             queue.Enqueue(item);
             queue.Enqueue(item2);
             queue.Enqueue(item3);
@@ -75,8 +75,8 @@ namespace Perrich.FtpQueue.Test
         [Test]
         public void ShouldEnqueueThrowExceptionIfDestinationFilenameNotDefined()
         {
-            var queue = new FtpQueue(QueueName);
-            var item = new FtpItem { DestPath = "./", Identifier = "1" };
+            var queue = new FileTransferQueue(QueueName);
+            var item = new FileItem { DestPath = "./", Identifier = "1" };
             Assert.Throws<ArgumentException>(() => queue.Enqueue(item));
         }
 
@@ -84,8 +84,8 @@ namespace Perrich.FtpQueue.Test
         public void ShouldCheckIfQueueContainsADestinationFilename()
         {
             const string filename = "mysamplefilename.zip";
-            var queue = new FtpQueue(QueueName);
-            var item = new FtpItem { DestPath = "./" + filename, Identifier = "1" };
+            var queue = new FileTransferQueue(QueueName);
+            var item = new FileItem { DestPath = "./" + filename, Identifier = "1" };
             queue.Enqueue(item);
             Assert.True(queue.Contains(filename));
         }

@@ -2,15 +2,15 @@
 using System.IO;
 using EnterpriseDT.Net.Ftp;
 
-namespace Perrich.FtpQueue.Edtftpnet
+namespace Perrich.FileTransferQueue.EdtFilenet
 {
-    public class EdtftpnetSendingProvider : ISendingProvider
+    public class EdtFilenetSendingProvider : ISendingProvider
     {
         private readonly SecureFTPConnection connexion;
 
         private string currentDirectory;
 
-        public EdtftpnetSendingProvider(SecureFTPConnection connexion)
+        public EdtFilenetSendingProvider(SecureFTPConnection connexion)
         {
             this.connexion = connexion;
         }

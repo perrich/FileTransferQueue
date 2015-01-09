@@ -1,17 +1,17 @@
 ﻿using System.IO;
 using NUnit.Framework;
 
-namespace Perrich.FtpQueue.Test
+namespace Perrich.FileTransferQueue.Test
 {
-    public class FileFtpQueueRepositoryTest
+    public class LocalQueueRepositoryTest
     {
         private string filename;
-        private FileFtpQueueRepository repository;
+        private LocalQueueRepository repository;
 
         [SetUp]
         public void Init()
         {
-            repository = new FileFtpQueueRepository(".");
+            repository = new LocalQueueRepository(".");
         }
 
         [TearDown]
@@ -74,10 +74,10 @@ namespace Perrich.FtpQueue.Test
             const string queueName = "MySampleSaveQueue";
             filename = GetFileName(queueName);
 
-            var queue = new FtpQueue(queueName);
-            queue.Enqueue(new FtpItem { DestPath = "./destfile.txt", SrcPath = "srcfile.txt" });
-            queue.Enqueue(new FtpItem { DestPath = "./1.txt", Identifier = "1" });
-            queue.Enqueue(new FtpItem { DestPath = "./1.txt", Identifier = "2" });
+            var queue = new FileTransferQueue(queueName);
+            queue.Enqueue(new FileItem { DestPath = "./destfile.txt", SrcPath = "srcfile.txt" });
+            queue.Enqueue(new FileItem { DestPath = "./1.txt", Identifier = "1" });
+            queue.Enqueue(new FileItem { DestPath = "./1.txt", Identifier = "2" });
 
             repository.Save(queue);
 

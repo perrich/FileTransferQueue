@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("FtpQueue.Edtftpnet")]
+[assembly: AssemblyTitle("Perrich.FileQueue")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("FtpQueue.Edtftpnet")]
+[assembly: AssemblyProduct("Perrich.FileQueue")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("c3c6e41b-de92-4375-bb0d-7e2fd34f5c6a")]
+[assembly: Guid("1504c29d-a7a2-49dd-8fba-4f51cd61f3d1")]
 
 // Version information for an assembly consists of the following four values:
 //

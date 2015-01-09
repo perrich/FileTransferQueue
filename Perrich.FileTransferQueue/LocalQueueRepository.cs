@@ -4,15 +4,15 @@ using System.Text.RegularExpressions;
 using log4net;
 using Newtonsoft.Json;
 
-namespace Perrich.FtpQueue
+namespace Perrich.FileTransferQueue
 {
     /// <summary>
     /// Save the queue in a local file (using a JSON serialization).
     /// Filename is named as "xxx.queue" with xxx as queue name.
     /// </summary>
-    public class FileFtpQueueRepository : IFtpQueueRepository
+    public class LocalQueueRepository : IQueueRepository
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(FileFtpQueueRepository).FullName);
+        private static readonly ILog Log = LogManager.GetLogger(typeof(LocalQueueRepository).FullName);
 
         private static readonly Regex RejectedFilenameCharRegexRegex = new Regex("[?|%|*|:|\\||\"|/|\\\\]", RegexOptions.Compiled);
 
@@ -22,14 +22,14 @@ namespace Perrich.FtpQueue
         /// Define a repository using the provided directory
         /// </summary>
         /// <param name="directory"></param>
-        public FileFtpQueueRepository(string directory)
+        public LocalQueueRepository(string directory)
         {
             this.directory = directory;
         }
 
-        public void Save(FtpQueue queue)
+        public void Save(FileTransferQueue queue)
         {
-            var str = JsonConvert.SerializeObject(queue.FlushItems(), Formatting.None, new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Ignore });
+            var str = JsonConvert.SerializeObject(queue.FlushItems(), Formatting.Indented, new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Ignore });
 
             using (var writer = new StreamWriter(GetFullPath(queue.Name)))
             {
@@ -37,9 +37,9 @@ namespace Perrich.FtpQueue
             }
         }
 
-        public FtpQueue Load(string name)
+        public FileTransferQueue Load(string name)
         {
-            var queue = new FtpQueue(name);
+            var queue = new FileTransferQueue(name);
             string str;
 
             var fullPath = GetFullPath(name);
@@ -55,7 +55,7 @@ namespace Perrich.FtpQueue
                 str = reader.ReadToEnd();
             }
 
-            var list = JsonConvert.DeserializeObject<List<FtpItem>>(str);
+            var list = JsonConvert.DeserializeObject<List<FileItem>>(str);
             foreach (var item in list)
             {
                 queue.Enqueue(item);

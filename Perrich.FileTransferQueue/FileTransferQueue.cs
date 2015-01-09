@@ -3,22 +3,25 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Perrich.FtpQueue
+namespace Perrich.FileTransferQueue
 {
-    public class FtpQueue
+    /// <summary>
+    /// Queue which contains ordered files to transfer
+    /// </summary>
+    public class FileTransferQueue
     {
         private readonly ISet<string> filenames = new HashSet<string>();
-        private readonly Queue<FtpItem> queue = new Queue<FtpItem>();
+        private readonly Queue<FileItem> queue = new Queue<FileItem>();
 
         private readonly object syncObj = new object();
 
         public string Name { get; private set; }
 
         /// <summary>
-        /// Create an FTP Queue
+        /// Create an File Queue
         /// </summary>
         /// <param name="name"></param>
-        public FtpQueue(string name)
+        public FileTransferQueue(string name)
         {
             Name = name;
         }
@@ -27,9 +30,9 @@ namespace Perrich.FtpQueue
         /// Add an item into the queue
         /// </summary>
         /// <param name="item"></param>
-        public void Enqueue(FtpItem item)
+        public void Enqueue(FileItem item)
         {
-            string filename = Path.GetFileName(item.DestPath);
+            var filename = Path.GetFileName(item.DestPath);
 
             if (string.IsNullOrEmpty(filename))
                 throw new ArgumentException("Destination path should contain a filename");
@@ -45,16 +48,16 @@ namespace Perrich.FtpQueue
         /// Get the first item in the queue
         /// </summary>
         /// <returns></returns>
-        public FtpItem Dequeue()
+        public FileItem Dequeue()
         {
-            FtpItem item = null;
+            FileItem item = null;
 
             lock (syncObj)
             {
                 try
                 {
                     item = queue.Dequeue();
-                    string filename = Path.GetFileName(item.DestPath);
+                    var filename = Path.GetFileName(item.DestPath);
                     filenames.Remove(filename);
                 }
                 catch (InvalidOperationException)
@@ -82,9 +85,9 @@ namespace Perrich.FtpQueue
         /// Get all items and clear the queue
         /// </summary>
         /// <returns></returns>
-        public IList<FtpItem> FlushItems()
+        public IList<FileItem> FlushItems()
         {
-            IList<FtpItem> items;
+            IList<FileItem> items;
             lock (syncObj)
             {
                 items = queue.ToList();

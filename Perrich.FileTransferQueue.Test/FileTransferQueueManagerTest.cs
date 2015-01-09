@@ -4,9 +4,9 @@ using System.IO;
 using FakeItEasy;
 using NUnit.Framework;
 
-namespace Perrich.FtpQueue.Test
+namespace Perrich.FileTransferQueue.Test
 {
-    public class FtpQueueManagerTest
+    public class FileTransferQueueManagerTest
     {
         private const string QueueName = "MySampleQueue";
         private const string DestFile1 = "./destfile.txt";
@@ -15,22 +15,22 @@ namespace Perrich.FtpQueue.Test
         private const string Identifier1 = "A1";
         private const string Identifier2 = "KEY_2";
 
-        private const string SrcFile1 = "FtpQueueManagerTest1.txt";
-        private const string StreamFile1 = "FtpQueueManagerTest2.txt";
+        private const string SrcFile1 = "FileTransferQueueManagerTest1.txt";
+        private const string StreamFile1 = "FileTransferQueueManagerTest2.txt";
 
-        private IFtpQueueRepository queueRepository;
+        private IQueueRepository queueRepository;
         private IFileSystem system;
         private ISendingProvider provider;
-        private FtpQueueManager manager;
-        private FtpQueue queue;
+        private FileTransferQueueManager manager;
+        private FileTransferQueue queue;
         private Stream fakeStream;
 
-        private Dictionary<FtpQueueManager.NotificationType, IList<FtpItem>> receivedEvents = new Dictionary<FtpQueueManager.NotificationType, IList<FtpItem>>();
+        private Dictionary<FileTransferQueueManager.NotificationType, IList<FileItem>> receivedEvents = new Dictionary<FileTransferQueueManager.NotificationType, IList<FileItem>>();
 
         [SetUp]
         public void Init()
         {
-            queueRepository = A.Fake<IFtpQueueRepository>();
+            queueRepository = A.Fake<IQueueRepository>();
             system = A.Fake<IFileSystem>();
             provider = A.Fake<ISendingProvider>();
 
@@ -39,17 +39,17 @@ namespace Perrich.FtpQueue.Test
 
             fakeStream = new FileStream(StreamFile1, FileMode.Open, FileAccess.Read);
 
-            queue = new FtpQueue(QueueName);
-            queue.Enqueue(new FtpItem { DestPath = DestFile1, SrcPath = SrcFile1 });
-            queue.Enqueue(new FtpItem { DestPath = "./1.txt", Identifier = Identifier1 });
-            queue.Enqueue(new FtpItem { DestPath = "./2.txt", Identifier = Identifier2 });
+            queue = new FileTransferQueue(QueueName);
+            queue.Enqueue(new FileItem { DestPath = DestFile1, SrcPath = SrcFile1 });
+            queue.Enqueue(new FileItem { DestPath = "./1.txt", Identifier = Identifier1 });
+            queue.Enqueue(new FileItem { DestPath = "./2.txt", Identifier = Identifier2 });
 
             A.CallTo(() => queueRepository.Load(QueueName)).Returns(queue);
 
             A.CallTo(() => system.GetStream(A<string>.Ignored)).Returns(fakeStream);
             A.CallTo(() => provider.Send(A<Stream>.Ignored, A<string>.Ignored)).Returns(true);
 
-            manager = new FtpQueueManager(QueueName, queueRepository, system, provider);
+            manager = new FileTransferQueueManager(QueueName, queueRepository, system, provider);
             manager.NotificationRaised += manager_NotificationRaised;
         }
 
@@ -104,7 +104,7 @@ namespace Perrich.FtpQueue.Test
         [Test]
         public void ShouldEnqueueFileIfSendIsRejected()
         {
-            var q = new FtpQueue(QueueName);
+            var q = new FileTransferQueue(QueueName);
 
             A.CallTo(() => provider.Send(A<Stream>.Ignored, A<string>.Ignored)).Returns(false);
             A.CallTo(() => queueRepository.Load(QueueName)).Returns(q);
@@ -123,7 +123,7 @@ namespace Perrich.FtpQueue.Test
         [Test]
         public void ShouldEnqueueStreamAndNotifyIfSendIsRejected()
         {
-            var q = new FtpQueue(QueueName);
+            var q = new FileTransferQueue(QueueName);
 
             A.CallTo(() => provider.Send(A<Stream>.Ignored, A<string>.Ignored)).Returns(false);
             A.CallTo(() => queueRepository.Load(QueueName)).Returns(q);
@@ -142,7 +142,7 @@ namespace Perrich.FtpQueue.Test
             Assert.AreEqual(Identifier1, list[0].Identifier);
             Assert.AreEqual(DestFile1, list[0].DestPath);
 
-            AssertOnlyOneNotificationReceived(FtpQueueManager.NotificationType.Warn, Identifier1);
+            AssertOnlyOneNotificationReceived(FileTransferQueueManager.NotificationType.Warn, Identifier1);
         }
 
         [Test]
@@ -156,7 +156,7 @@ namespace Perrich.FtpQueue.Test
             A.CallTo(() => system.Delete(Identifier2)).MustHaveHappened(Repeated.Exactly.Once);
             A.CallTo(() => system.GetStream(Identifier2)).MustHaveHappened(Repeated.Exactly.Once);
 
-            AssertOnlyOneNotificationReceived(FtpQueueManager.NotificationType.Error, Identifier1);
+            AssertOnlyOneNotificationReceived(FileTransferQueueManager.NotificationType.Error, Identifier1);
         }
 
         [Test]
@@ -182,11 +182,11 @@ namespace Perrich.FtpQueue.Test
             Assert.Throws<ArgumentException>(() => manager.TryToSend(fakeStream, string.Empty));
         }
 
-        void manager_NotificationRaised(FtpQueueManager.NotificationType type, FtpItem item)
+        void manager_NotificationRaised(FileTransferQueueManager.NotificationType type, FileItem item)
         {
             if (!receivedEvents.ContainsKey(type))
             {
-                receivedEvents.Add(type, new List<FtpItem>());
+                receivedEvents.Add(type, new List<FileItem>());
             }
             receivedEvents[type].Add(item);
         }
@@ -204,7 +204,7 @@ namespace Perrich.FtpQueue.Test
             A.CallTo(() => system.Delete(Identifier2)).MustHaveHappened(Repeated.Exactly.Once);
         }
 
-        private void AssertOnlyOneNotificationReceived(FtpQueueManager.NotificationType type, string identifier)
+        private void AssertOnlyOneNotificationReceived(FileTransferQueueManager.NotificationType type, string identifier)
         {
             Assert.True(receivedEvents.ContainsKey(type));
             Assert.AreEqual(1, receivedEvents[type].Count);

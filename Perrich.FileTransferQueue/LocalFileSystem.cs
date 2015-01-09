@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using log4net;
 
-namespace Perrich.FtpQueue
+namespace Perrich.FileTransferQueue
 {
     /// <summary>
     /// Implementation of a local file respository.
@@ -89,7 +89,7 @@ namespace Perrich.FtpQueue
             {
                 File.Delete(path);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new FileSystemException(FileSystemException.ActionType.Delete,
                     string.Format("The entry with \"{0}\" as identifier cannot be deleted in the file system.", identifier));

@@ -2,22 +2,22 @@
 using System.IO;
 using log4net;
 
-namespace Perrich.FtpQueue
+namespace Perrich.FileTransferQueue
 {
     /// <summary>
-    /// Manage an FTP Queue
+    /// Manage file sending using a file transfer queue when a reject occurs
     /// </summary>
-    public class FtpQueueManager
+    public class FileTransferQueueManager
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(FtpQueueManager).FullName);
+        private static readonly ILog Log = LogManager.GetLogger(typeof(FileTransferQueueManager).FullName);
 
-        private FtpQueue ftpQueue;
+        private FileTransferQueue fileQueue;
         private readonly string queueName;
-        private readonly IFtpQueueRepository queueRepository;
+        private readonly IQueueRepository queueRepository;
         private readonly IFileSystem system;
         private readonly ISendingProvider provider;
 
-        public delegate void NotificationRaisedEventHandler(NotificationType type, FtpItem item);
+        public delegate void NotificationRaisedEventHandler(NotificationType type, FileItem item);
 
         /// <summary>
         /// Allow to subscribe to notification
@@ -33,10 +33,10 @@ namespace Perrich.FtpQueue
             Warn,
         }
 
-        public FtpQueueManager(string queueName, IFtpQueueRepository queueRepository, IFileSystem system, ISendingProvider provider)
+        public FileTransferQueueManager(string queueName, IQueueRepository queueRepository, IFileSystem system, ISendingProvider provider)
         {
             this.queueName = queueName;
-            ftpQueue = new FtpQueue(queueName);
+            fileQueue = new FileTransferQueue(queueName);
             this.queueRepository = queueRepository;
             this.system = system;
             this.provider = provider;
@@ -47,7 +47,7 @@ namespace Perrich.FtpQueue
         /// </summary>
         public void Init()
         {
-            ftpQueue = queueRepository.Load(queueName);
+            fileQueue = queueRepository.Load(queueName);
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Perrich.FtpQueue
         /// </summary>
         public void ApplyQueue()
         {
-            foreach (var item in ftpQueue.FlushItems())
+            foreach (var item in fileQueue.FlushItems())
             {
                 if (item.SrcPath != null)
                 {
@@ -105,7 +105,7 @@ namespace Perrich.FtpQueue
         /// </summary>
         public void Save()
         {
-            queueRepository.Save(ftpQueue);
+            queueRepository.Save(fileQueue);
         }
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace Perrich.FtpQueue
                 if (provider.Send(stream, destPath)) return true;
             }
 
-            ftpQueue.Enqueue(new FtpItem { SrcPath = srcPath, DestPath = destPath });
+            fileQueue.Enqueue(new FileItem { SrcPath = srcPath, DestPath = destPath });
             return false;
         }
 
@@ -153,14 +153,14 @@ namespace Perrich.FtpQueue
             stream.Close();
 
             identifier = identifier ?? system.SaveStream(stream);
-            var item = new FtpItem {Identifier = identifier, DestPath = destPath};
-            ftpQueue.Enqueue(item);
+            var item = new FileItem {Identifier = identifier, DestPath = destPath};
+            fileQueue.Enqueue(item);
 
             NotifyEvent(NotificationType.Warn, item);
             return false;
         }
 
-        private void NotifyEvent(NotificationType notificationType, FtpItem item)
+        private void NotifyEvent(NotificationType notificationType, FileItem item)
         {
             if (NotificationRaised != null)
                 NotificationRaised(notificationType, item);

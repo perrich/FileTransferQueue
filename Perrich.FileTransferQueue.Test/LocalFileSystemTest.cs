@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using NUnit.Framework;
 
-namespace Perrich.FtpQueue.Test
+namespace Perrich.FileTransferQueue.Test
 {
     public class LocalFileSystemTest
     {

@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Perrich.FtpQueue
+namespace Perrich.FileTransferQueue
 {
     /// <summary>
     /// Provide a way to send a file from a local path to a remote path

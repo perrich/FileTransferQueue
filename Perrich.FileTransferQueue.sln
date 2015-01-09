@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Perrich.FtpQueue", "Perrich.FtpQueue\Perrich.FtpQueue.csproj", "{C9F6D050-59F2-4E8D-92DC-CCE0ACE92AC9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Perrich.FileTransferQueue", "Perrich.FileTransferQueue\Perrich.FileTransferQueue.csproj", "{C9F6D050-59F2-4E8D-92DC-CCE0ACE92AC9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Perrich.FtpQueue.Test", "Perrich.FtpQueue.Test\Perrich.FtpQueue.Test.csproj", "{0C173CF8-B849-4953-96DF-889F7B23881C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Perrich.FileTransferQueue.Test", "Perrich.FileTransferQueue.Test\Perrich.FileTransferQueue.Test.csproj", "{0C173CF8-B849-4953-96DF-889F7B23881C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Perrich.FtpQueue.Edtftpnet", "Perrich.FtpQueue.Edtftpnet\Perrich.FtpQueue.Edtftpnet.csproj", "{A65BF4CD-107B-4310-A8BD-9AC8C074763A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Perrich.FileTransferQueue.Edtftpnet", "Perrich.FileTransferQueue.Edtftpnet\Perrich.FileTransferQueue.Edtftpnet.csproj", "{A65BF4CD-107B-4310-A8BD-9AC8C074763A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

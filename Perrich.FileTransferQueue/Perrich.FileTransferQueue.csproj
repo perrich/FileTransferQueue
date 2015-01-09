@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0C173CF8-B849-4953-96DF-889F7B23881C}</ProjectGuid>
+    <ProjectGuid>{C9F6D050-59F2-4E8D-92DC-CCE0ACE92AC9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Perrich.FtpQueue.Test</RootNamespace>
-    <AssemblyName>Perrich.FtpQueue.Test</AssemblyName>
+    <RootNamespace>Perrich.FileTransferQueue</RootNamespace>
+    <AssemblyName>Perrich.FileTransferQueue</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,11 +30,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FakeItEasy">
-      <HintPath>..\packages\FakeItEasy.1.25.1\lib\net40\FakeItEasy.dll</HintPath>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.7\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -45,23 +46,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LocalFileSystemTest.cs" />
-    <Compile Include="FileFtpQueueRepositoryTest.cs" />
-    <Compile Include="FtpQueueManagerTest.cs" />
-    <Compile Include="FtpQueueTest.cs" />
+    <Compile Include="FileSystemException.cs" />
+    <Compile Include="IFileSystem.cs" />
+    <Compile Include="LocalFileSystem.cs" />
+    <Compile Include="FileItem.cs" />
+    <Compile Include="FileTransferQueueManager.cs" />
+    <Compile Include="FileTransferQueue.cs" />
+    <Compile Include="LocalQueueRepository.cs" />
+    <Compile Include="IQueueRepository.cs" />
+    <Compile Include="ISendingProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Perrich.FtpQueue\Perrich.FtpQueue.csproj">
-      <Project>{c9f6d050-59f2-4e8d-92dc-cce0ace92ac9}</Project>
-      <Name>Perrich.FtpQueue</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

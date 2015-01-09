@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Perrich.FtpQueue
+namespace Perrich.FileTransferQueue
 {
     /// <summary>
     /// System to save not sent files

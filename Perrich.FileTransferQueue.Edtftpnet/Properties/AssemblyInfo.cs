@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("FtpQueue.Test")]
+[assembly: AssemblyTitle("FileQueue.EdtFilenet")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("FtpQueue.Test")]
+[assembly: AssemblyProduct("FileQueue.EdtFilenet")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("656023a1-065a-4a76-ad69-ea288997d540")]
+[assembly: Guid("c3c6e41b-de92-4375-bb0d-7e2fd34f5c6a")]
 
 // Version information for an assembly consists of the following four values:
 //

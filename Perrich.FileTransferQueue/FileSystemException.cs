@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Perrich.FtpQueue
+namespace Perrich.FileTransferQueue
 {
     /// <summary>
     /// An exception occured in a file system action
