@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using FakeItEasy;
 using NUnit.Framework;
@@ -24,6 +25,8 @@ namespace Perrich.FtpQueue.Test
         private FtpQueue queue;
         private Stream fakeStream;
 
+        private Dictionary<FtpQueueManager.NotificationType, IList<FtpItem>> receivedEvents = new Dictionary<FtpQueueManager.NotificationType, IList<FtpItem>>();
+
         [SetUp]
         public void Init()
         {
@@ -47,6 +50,13 @@ namespace Perrich.FtpQueue.Test
             A.CallTo(() => provider.Send(A<Stream>.Ignored, A<string>.Ignored)).Returns(true);
 
             manager = new FtpQueueManager(QueueName, queueRepository, system, provider);
+            manager.NotificationRaised += manager_NotificationRaised;
+        }
+
+        [TearDown]
+        public void Dispose()
+        {
+            manager.NotificationRaised -= manager_NotificationRaised;
         }
 
         [Test]
@@ -111,7 +121,7 @@ namespace Perrich.FtpQueue.Test
         }
 
         [Test]
-        public void ShouldEnqueueStreamIfSendIsRejected()
+        public void ShouldEnqueueStreamAndNotifyIfSendIsRejected()
         {
             var q = new FtpQueue(QueueName);
 
@@ -131,8 +141,23 @@ namespace Perrich.FtpQueue.Test
             Assert.AreEqual(1, list.Count);
             Assert.AreEqual(Identifier1, list[0].Identifier);
             Assert.AreEqual(DestFile1, list[0].DestPath);
+
+            AssertOnlyOneNotificationReceived(FtpQueueManager.NotificationType.Warn, Identifier1);
         }
 
+        [Test]
+        public void ShouldNotifyErrorAndProcessOthersWhenApplyProcessQueue()
+        {
+            A.CallTo(() => system.GetStream(Identifier1)).Throws(new FileSystemException(FileSystemException.ActionType.Delete, "something goes wrong"));
+            manager.InitAndApply();
+
+            //only the first is rejected
+            A.CallTo(() => system.Delete(Identifier1)).MustNotHaveHappened();
+            A.CallTo(() => system.Delete(Identifier2)).MustHaveHappened(Repeated.Exactly.Once);
+            A.CallTo(() => system.GetStream(Identifier2)).MustHaveHappened(Repeated.Exactly.Once);
+
+            AssertOnlyOneNotificationReceived(FtpQueueManager.NotificationType.Error, Identifier1);
+        }
 
         [Test]
         public void ShouldManagerThrowExceptionIfSourceStreamIsNull()
@@ -157,6 +182,15 @@ namespace Perrich.FtpQueue.Test
             Assert.Throws<ArgumentException>(() => manager.TryToSend(fakeStream, string.Empty));
         }
 
+        void manager_NotificationRaised(FtpQueueManager.NotificationType type, FtpItem item)
+        {
+            if (!receivedEvents.ContainsKey(type))
+            {
+                receivedEvents.Add(type, new List<FtpItem>());
+            }
+            receivedEvents[type].Add(item);
+        }
+
         private void AssertQueueIsFullyApplied()
         {
             A.CallTo(() => system.GetStream(A<string>.Ignored)).MustHaveHappened(Repeated.Exactly.Twice);
@@ -168,6 +202,13 @@ namespace Perrich.FtpQueue.Test
             A.CallTo(() => provider.Send(fakeStream, DestFile3)).MustHaveHappened(Repeated.Exactly.Once);
             A.CallTo(() => system.Delete(Identifier1)).MustHaveHappened(Repeated.Exactly.Once);
             A.CallTo(() => system.Delete(Identifier2)).MustHaveHappened(Repeated.Exactly.Once);
+        }
+
+        private void AssertOnlyOneNotificationReceived(FtpQueueManager.NotificationType type, string identifier)
+        {
+            Assert.True(receivedEvents.ContainsKey(type));
+            Assert.AreEqual(1, receivedEvents[type].Count);
+            Assert.AreEqual(identifier, receivedEvents[type][0].Identifier);
         }
 
         private static void CreateFile(string filename)

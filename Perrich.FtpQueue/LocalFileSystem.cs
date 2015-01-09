@@ -65,10 +65,6 @@ namespace Perrich.FtpQueue
         {
             var path = Path.Combine(dirPath, identifier);
 
-            if (!File.Exists(path))
-                throw new FileSystemException(FileSystemException.ActionType.Read,
-                    string.Format("The identifier \"{0}\" does not exists in the file system.", identifier));
-
             try
             {
                 return new FileStream(path, FileMode.Open, FileAccess.Read);

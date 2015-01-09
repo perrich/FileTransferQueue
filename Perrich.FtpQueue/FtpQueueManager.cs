@@ -17,6 +17,22 @@ namespace Perrich.FtpQueue
         private readonly IFileSystem system;
         private readonly ISendingProvider provider;
 
+        public delegate void NotificationRaisedEventHandler(NotificationType type, FtpItem item);
+
+        /// <summary>
+        /// Allow to subscribe to notification
+        /// </summary>
+        public event NotificationRaisedEventHandler NotificationRaised;
+
+        /// <summary>
+        /// All notification type
+        /// </summary>
+        public enum NotificationType
+        {
+            Error,
+            Warn,
+        }
+
         public FtpQueueManager(string queueName, IFtpQueueRepository queueRepository, IFileSystem system, ISendingProvider provider)
         {
             this.queueName = queueName;
@@ -68,7 +84,8 @@ namespace Perrich.FtpQueue
                     }
                     catch (FileSystemException ex)
                     {
-                        Log.Error(string.Format("Cannot send item with \"{0}\" as identifier", item.Identifier), ex);
+                        Log.Error(string.Format("Cannot send item (Id=\"{0}\", Dest=\"{1}\")", item.Identifier, item.DestPath), ex);
+                        NotifyEvent(NotificationType.Error, item);
                     }
                 }
             }
@@ -136,8 +153,17 @@ namespace Perrich.FtpQueue
             stream.Close();
 
             identifier = identifier ?? system.SaveStream(stream);
-            ftpQueue.Enqueue(new FtpItem { Identifier = identifier, DestPath = destPath });
+            var item = new FtpItem {Identifier = identifier, DestPath = destPath};
+            ftpQueue.Enqueue(item);
+
+            NotifyEvent(NotificationType.Warn, item);
             return false;
+        }
+
+        private void NotifyEvent(NotificationType notificationType, FtpItem item)
+        {
+            if (NotificationRaised != null)
+                NotificationRaised(notificationType, item);
         }
     }
 }
