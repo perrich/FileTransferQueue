@@ -66,27 +66,37 @@ namespace Perrich.FileTransferQueue
         {
             foreach (var item in fileQueue.FlushItems())
             {
-                if (item.SrcPath != null)
+                try
                 {
-                    TryToSend(item.SrcPath, item.DestPath);
+                    ApplyItem(item);
                 }
-                else if (item.Identifier != null)
+                catch (FileSystemException ex)
                 {
-                    try
-                    {
-                        var stream = system.GetStream(item.Identifier);
-                        var sended = TryToSend(stream, item.DestPath, item.Identifier);
+                    Log.Error(string.Format("Cannot send item ({0}): issue in file system.", item), ex);
+                    NotifyEvent(NotificationType.Error, item);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(string.Format("Cannot send item ({0}): not managed issue.", item), ex);
+                    NotifyEvent(NotificationType.Error, item);
+                }
+            }
+        }
 
-                        if (sended)
-                        {
-                            system.Delete(item.Identifier);
-                        }
-                    }
-                    catch (FileSystemException ex)
-                    {
-                        Log.Error(string.Format("Cannot send item (Id=\"{0}\", Dest=\"{1}\")", item.Identifier, item.DestPath), ex);
-                        NotifyEvent(NotificationType.Error, item);
-                    }
+        private void ApplyItem(FileItem item)
+        {
+            if (item.SrcPath != null)
+            {
+                TryToSend(item.SrcPath, item.DestPath);
+            }
+            else if (item.Identifier != null)
+            {
+                var stream = system.GetStream(item.Identifier);
+                var sended = TryToSend(stream, item.DestPath, item.Identifier);
+
+                if (sended)
+                {
+                    system.Delete(item.Identifier);
                 }
             }
         }
@@ -113,7 +123,9 @@ namespace Perrich.FileTransferQueue
         /// </summary>
         /// <param name="srcPath">The local path</param>
         /// <param name="destPath">The remote path</param>
-        /// <returns></returns>
+        /// <returns>True if file is sent</returns>
+        /// <exception cref="ArgumentException">Parameter issue</exception>
+        /// <exception cref="FileSystemException">File system issue</exception>
         public bool TryToSend(string srcPath, string destPath)
         {
             if (string.IsNullOrEmpty(srcPath))
@@ -135,7 +147,9 @@ namespace Perrich.FileTransferQueue
         /// </summary>
         /// <param name="stream">The stream to save</param>
         /// <param name="destPath">The remote path</param>
-        /// <returns></returns>
+        /// <returns>True if stream is sent</returns>
+        /// <exception cref="ArgumentException">Parameter issue</exception>
+        /// <exception cref="FileSystemException">File system issue</exception>
         public bool TryToSend(Stream stream, string destPath)
         {
             if (stream == null)
@@ -149,6 +163,8 @@ namespace Perrich.FileTransferQueue
         private bool TryToSend(Stream stream, string destPath, string identifier)
         {
             if (provider.Send(stream, destPath)) return true;
+
+            Log.WarnFormat("Cannot send stream to {0}. Add it to the queue.", destPath);
 
             stream.Close();
 

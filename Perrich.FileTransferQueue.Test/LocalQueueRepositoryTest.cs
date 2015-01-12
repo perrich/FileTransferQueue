@@ -72,6 +72,20 @@ namespace Perrich.FileTransferQueue.Test
         public void ShouldSaveAQueue()
         {
             const string queueName = "MySampleSaveQueue";
+            const string jsonString = @"[
+  {
+    ""SrcPath"": ""srcfile.txt"",
+    ""DestPath"": ""./destfile.txt""
+  },
+  {
+    ""Identifier"": ""1"",
+    ""DestPath"": ""./1.txt""
+  },
+  {
+    ""Identifier"": ""2"",
+    ""DestPath"": ""./1.txt""
+  }
+]";
             filename = GetFileName(queueName);
 
             var queue = new FileTransferQueue(queueName);
@@ -84,7 +98,7 @@ namespace Perrich.FileTransferQueue.Test
             Assert.AreEqual(0, queue.FlushItems().Count, "After a save, the queue should be empty");
             Assert.True(File.Exists(filename));
 
-            Assert.AreEqual("[{\"SrcPath\":\"srcfile.txt\",\"DestPath\":\"./destfile.txt\"},{\"Identifier\":\"1\",\"DestPath\":\"./1.txt\"},{\"Identifier\":\"2\",\"DestPath\":\"./1.txt\"}]", File.ReadAllText(filename));
+            Assert.AreEqual(jsonString, File.ReadAllText(filename));
             File.Delete(filename);
         }
 
