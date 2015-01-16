@@ -1,7 +1,7 @@
 FileTransferQueue
 ========
 
-A local Queue to handle transfer errors. First need was to manage FTP transfer issue but the API is open and you can manage any transfer protocol and persistence solution.
+A persistant queue implementation to handle transfer errors. First need was to manage FTP transfer issues but it is possible to implement any solution. You can manage any transfer protocol (FTP, HTTP, message queue, ...) and persistence solution (file, database, message queue, ...).
 
 The current version includes :
 - a JSON configuration file to persist the queue
