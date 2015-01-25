@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileItemTest.cs" />
     <Compile Include="LocalFileSystemTest.cs" />
     <Compile Include="LocalQueueRepositoryTest.cs" />
     <Compile Include="FileTransferQueueManagerTest.cs" />

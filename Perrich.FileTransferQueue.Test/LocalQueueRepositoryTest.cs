@@ -22,7 +22,7 @@ namespace Perrich.FileTransferQueue.Test
         }
 
         [Test]
-        public void ShouldInitializeAnEmptyQueueForNewerQueue()
+        public void ShouldInitializeAnEmptyQueueForNotFoundQueue()
         {
             const string queueName = "MySampleQueue";
             filename = GetFileName(queueName);
@@ -30,6 +30,17 @@ namespace Perrich.FileTransferQueue.Test
             var queue = repository.Load(queueName);
 
             Assert.AreEqual(0, queue.FlushItems().Count);
+            Assert.AreEqual(queueName, queue.Name);
+        }
+
+        [Test]
+        public void ShouldInitializeAnEmptyQueueForCreation()
+        {
+            const string queueName = "MySampleQueue";
+            var queue = repository.Create(queueName);
+
+            Assert.AreEqual(0, queue.FlushItems().Count);
+            Assert.AreEqual(queueName, queue.Name);
         }
 
         [Test]

@@ -103,6 +103,16 @@ namespace Perrich.FileTransferQueue.Test
             }
         }
 
+        [Test]
+        public void ShouldLocalFileSystemThrowExceptionIfStreamCannotBeDeleted()
+        {
+            using (new FileStream(Filename, FileMode.Open, FileAccess.Read, FileShare.None))
+            {
+                var exception = Assert.Catch<FileSystemException>(() => system.Delete(Filename));
+                Assert.AreEqual(FileSystemException.ActionType.Delete, exception.Type);
+            }
+        }
+
         private static void CreateFile(string filename)
         {
             if (File.Exists(filename))

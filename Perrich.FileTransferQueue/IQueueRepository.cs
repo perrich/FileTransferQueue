@@ -17,5 +17,12 @@ namespace Perrich.FileTransferQueue
         /// <param name="name">The name of the queue</param>
         /// <returns></returns>
         FileTransferQueue Load(string name);
+
+        /// <summary>
+        /// Create a new queue using provided name
+        /// </summary>
+        /// <param name="name">The name of the queue</param>
+        /// <returns></returns>
+        FileTransferQueue Create(string name);
     }
 }

@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 namespace Perrich.FileTransferQueue
 {
     /// <summary>
-    /// Save the queue in a local file (using a JSON serialization).
+    /// Persist queue in a dedicated local file (using a JSON serialization).
     /// Filename is named as "xxx.queue" with xxx as queue name.
     /// </summary>
     public class LocalQueueRepository : IQueueRepository
@@ -39,7 +39,7 @@ namespace Perrich.FileTransferQueue
 
         public FileTransferQueue Load(string name)
         {
-            var queue = new FileTransferQueue(name);
+            var queue = Create(name);
             string str;
 
             var fullPath = GetFullPath(name);
@@ -60,6 +60,13 @@ namespace Perrich.FileTransferQueue
             {
                 queue.Enqueue(item);
             }
+
+            return queue;
+        }
+
+        public FileTransferQueue Create(string name)
+        {
+            var queue = new FileTransferQueue(name);
 
             return queue;
         }
