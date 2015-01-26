@@ -6,7 +6,7 @@ A persistant queue implementation to handle transfer errors. First need was to m
 The current version includes :
 - a JSON configuration file to persist the queue
 - a local file based system to persist file not already sent
-- an FTP protocol using EdtFtpnet library
+- FTP protocols using EdtFtpnet and System.Net.FtpClient libraries
 
 
 Usage:
@@ -15,7 +15,7 @@ Usage:
   ...
   var queueRepository = new FileTransferQueueRepository("your config file folder");
   var system = new LocalFileSystem("your queued files folder");
-  var provider = new EdtftpnetSendingProvider(ftpConnexion);
+  var provider = new FtpClientSendingProvider(ftpConnexion);
   var manager = new FileTransferQueueManager("your queue name", queueRepository, system, provider);
   manager.NotificationRaised += manager_NotificationRaised;
   manager.InitAndApply(); // load configuration and try to send previously queued items
