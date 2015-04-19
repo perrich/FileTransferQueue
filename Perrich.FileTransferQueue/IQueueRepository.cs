@@ -15,14 +15,14 @@ namespace Perrich.FileTransferQueue
         /// Load the queue
         /// </summary>
         /// <param name="name">The name of the queue</param>
-        /// <returns></returns>
+        /// <returns>The loaded queue or an empty queue in the other cases.</returns>
         FileTransferQueue Load(string name);
 
         /// <summary>
-        /// Create a new queue using provided name
+        /// Create a new empty queue using provided name
         /// </summary>
         /// <param name="name">The name of the queue</param>
-        /// <returns></returns>
+        /// <returns>The new queue</returns>
         FileTransferQueue Create(string name);
     }
 }

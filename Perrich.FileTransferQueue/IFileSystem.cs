@@ -8,17 +8,17 @@ namespace Perrich.FileTransferQueue
     public interface IFileSystem
     {
         /// <summary>
-        /// Save the file defined in the full path and return an unique identifier to retreive it
+        /// Save the file defined in the full path and return an unique identifier to retrieve it
         /// </summary>
         /// <param name="fullPath"></param>
-        /// <returns>A unique identifier</returns>
+        /// <returns>An unique identifier</returns>
         string SaveFile(string fullPath);
 
         /// <summary>
-        /// Save the content of the stream to a file
+        /// Save the content of the stream and return an unique identifier to retrieve it
         /// </summary>
         /// <param name="stream"></param>
-        /// <returns>A unique identifier</returns>
+        /// <returns>An unique identifier</returns>
         string SaveStream(Stream stream);
 
         /// <summary>
