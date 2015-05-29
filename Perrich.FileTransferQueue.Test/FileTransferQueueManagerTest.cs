@@ -25,7 +25,7 @@ namespace Perrich.FileTransferQueue.Test
         private FileTransferQueue queue;
         private Stream fakeStream;
 
-        private Dictionary<FileTransferQueueManager.NotificationType, IList<FileItem>> receivedEvents = new Dictionary<FileTransferQueueManager.NotificationType, IList<FileItem>>();
+        private readonly Dictionary<FileTransferQueueManager.NotificationType, IList<FileItem>> receivedEvents = new Dictionary<FileTransferQueueManager.NotificationType, IList<FileItem>>();
 
         [SetUp]
         public void Init()
@@ -102,9 +102,30 @@ namespace Perrich.FileTransferQueue.Test
         }
 
         [Test]
-        public void ShouldEnqueueFileIfSendIsRejected()
+        public void ShouldNotifyIfFileSuccessfullySent()
         {
             var q = new FileTransferQueue(QueueName);
+            receivedEvents.Clear();
+
+            A.CallTo(() => provider.Send(A<Stream>.Ignored, A<string>.Ignored)).Returns(true);
+            A.CallTo(() => queueRepository.Load(QueueName)).Returns(q);
+            manager.Init();
+            manager.TryToSend(SrcFile1, DestFile1);
+            A.CallTo(() => queueRepository.Load(QueueName)).MustHaveHappened(Repeated.Exactly.Once);
+            A.CallTo(() => provider.Send(A<Stream>.Ignored, A<string>.Ignored)).MustHaveHappened(Repeated.Exactly.Once);
+
+            Assert.NotNull(q);
+            var list = q.FlushItems();
+            Assert.AreEqual(0, list.Count);
+
+            AssertOnlyOneNotificationReceived(FileTransferQueueManager.NotificationType.Success, DestFile1);
+        }
+
+        [Test]
+        public void ShouldEnqueueFileAndNotifyIfSendIsRejected()
+        {
+            var q = new FileTransferQueue(QueueName);
+            receivedEvents.Clear();
 
             A.CallTo(() => provider.Send(A<Stream>.Ignored, A<string>.Ignored)).Returns(false);
             A.CallTo(() => queueRepository.Load(QueueName)).Returns(q);
@@ -118,12 +139,38 @@ namespace Perrich.FileTransferQueue.Test
             Assert.AreEqual(1, list.Count);
             Assert.AreEqual(SrcFile1, list[0].SrcPath);
             Assert.AreEqual(DestFile1, list[0].DestPath);
+
+            AssertOnlyOneNotificationReceived(FileTransferQueueManager.NotificationType.Warn, DestFile1);
+        }
+
+        [Test]
+        public void ShouldNotifyIfStreamSuccessfullySent()
+        {
+            var q = new FileTransferQueue(QueueName);
+            receivedEvents.Clear();
+
+            A.CallTo(() => provider.Send(A<Stream>.Ignored, A<string>.Ignored)).Returns(true);
+            A.CallTo(() => queueRepository.Load(QueueName)).Returns(q);
+
+            manager.Init();
+
+            manager.TryToSend(fakeStream, DestFile1);
+            A.CallTo(() => queueRepository.Load(QueueName)).MustHaveHappened(Repeated.Exactly.Once);
+            A.CallTo(() => provider.Send(A<Stream>.Ignored, A<string>.Ignored)).MustHaveHappened(Repeated.Exactly.Once);
+            A.CallTo(() => system.SaveStream(fakeStream)).MustNotHaveHappened();
+
+            Assert.NotNull(q);
+            var list = q.FlushItems();
+            Assert.AreEqual(0, list.Count);
+
+            AssertOnlyOneNotificationReceived(FileTransferQueueManager.NotificationType.Success, DestFile1);
         }
 
         [Test]
         public void ShouldEnqueueStreamAndNotifyIfSendIsRejected()
         {
             var q = new FileTransferQueue(QueueName);
+            receivedEvents.Clear();
 
             A.CallTo(() => provider.Send(A<Stream>.Ignored, A<string>.Ignored)).Returns(false);
             A.CallTo(() => queueRepository.Load(QueueName)).Returns(q);
@@ -208,7 +255,10 @@ namespace Perrich.FileTransferQueue.Test
         {
             Assert.True(receivedEvents.ContainsKey(type));
             Assert.AreEqual(1, receivedEvents[type].Count);
-            Assert.AreEqual(identifier, receivedEvents[type][0].Identifier);
+            Assert.AreEqual(identifier,
+                string.IsNullOrEmpty(receivedEvents[type][0].Identifier)
+                    ? receivedEvents[type][0].DestPath
+                    : receivedEvents[type][0].Identifier);
         }
 
         private static void CreateFile(string filename)

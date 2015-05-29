@@ -31,6 +31,7 @@ namespace Perrich.FileTransferQueue
         {
             Error,
             Warn,
+            Success,
         }
 
         public FileTransferQueueManager(string queueName, IQueueRepository queueRepository, IFileSystem system, ISendingProvider provider)
@@ -135,10 +136,17 @@ namespace Perrich.FileTransferQueue
 
             using (var stream = new FileStream(srcPath, FileMode.Open, FileAccess.Read))
             {
-                if (provider.Send(stream, destPath)) return true;
+                if (provider.Send(stream, destPath))
+                {
+                    NotifyEvent(NotificationType.Success, new FileItem { SrcPath = srcPath, DestPath = destPath });
+                    return true;
+                }
             }
 
-            fileQueue.Enqueue(new FileItem { SrcPath = srcPath, DestPath = destPath });
+            var item = new FileItem { SrcPath = srcPath, DestPath = destPath };
+            fileQueue.Enqueue(item);
+
+            NotifyEvent(NotificationType.Warn, item);
             return false;
         }
 
@@ -162,7 +170,11 @@ namespace Perrich.FileTransferQueue
 
         private bool TryToSend(Stream stream, string destPath, string identifier)
         {
-            if (provider.Send(stream, destPath)) return true;
+            if (provider.Send(stream, destPath))
+            {
+                NotifyEvent(NotificationType.Success, new FileItem { Identifier = identifier, DestPath = destPath });
+                return true;
+            }
 
             Log.WarnFormat("Cannot send stream to {0}. Add it to the queue.", destPath);
 
