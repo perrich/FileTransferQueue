@@ -13,7 +13,7 @@ Usage:
 
 ```csharp
   ...
-  var queueRepository = new FileTransferQueueRepository("your config file folder");
+  var queueRepository = new LocalQueueRepository("your config file folder");
   var system = new LocalFileSystem("your queued files folder");
   var provider = new FtpClientSendingProvider(ftpConnexion);
   var manager = new FileTransferQueueManager("your queue name", queueRepository, system, provider);
@@ -29,7 +29,7 @@ Usage:
   ...
   void manager_NotificationRaised(FileTransferQueueManager.NotificationType type, FileItem item)
   {
-	// manage notification
+	// manage success/error notification
   }
  ```
 
