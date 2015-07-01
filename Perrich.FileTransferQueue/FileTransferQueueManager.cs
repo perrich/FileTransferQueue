@@ -178,9 +178,9 @@ namespace Perrich.FileTransferQueue
 
             Log.WarnFormat("Cannot send stream to {0}. Add it to the queue.", destPath);
 
+            identifier = identifier ?? system.SaveStream(stream);
             stream.Close();
 
-            identifier = identifier ?? system.SaveStream(stream);
             var item = new FileItem {Identifier = identifier, DestPath = destPath};
             fileQueue.Enqueue(item);
 

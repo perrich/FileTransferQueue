@@ -10,23 +10,32 @@ namespace Perrich.FileTransferQueue.EdtFilenet
 
         private string currentDirectory;
 
-        public EdtFilenetSendingProvider(SecureFTPConnection connexion)
+        private readonly bool enablechangeDirectory;
+
+        public EdtFilenetSendingProvider(SecureFTPConnection connexion, bool enablechangeDirectory)
         {
             this.connexion = connexion;
+            this.enablechangeDirectory = enablechangeDirectory;
         }
 
         public bool Send(Stream stream, string destPath)
         {
             try
             {
-                var wantedDirectory = Path.GetDirectoryName(destPath);
-                if (currentDirectory == null || wantedDirectory != currentDirectory)
+                if (enablechangeDirectory)
                 {
-                    connexion.ChangeWorkingDirectory(wantedDirectory);
-                    currentDirectory = wantedDirectory;
+                    var wantedDirectory = Path.GetDirectoryName(destPath);
+                    if ((currentDirectory == null || wantedDirectory != currentDirectory) && wantedDirectory != null)
+                    {
+                        connexion.ChangeWorkingDirectory(wantedDirectory);
+                        currentDirectory = wantedDirectory;
+                    }
+                    connexion.UploadStream(stream, Path.GetFileName(destPath), false);
                 }
-
-                connexion.UploadStream(stream, Path.GetFileName(destPath), false);
+                else
+                {
+                    connexion.UploadStream(stream, destPath, false);
+                }
             }
             catch (Exception)
             {

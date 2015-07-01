@@ -174,7 +174,7 @@ namespace Perrich.FileTransferQueue.Test
 
             A.CallTo(() => provider.Send(A<Stream>.Ignored, A<string>.Ignored)).Returns(false);
             A.CallTo(() => queueRepository.Load(QueueName)).Returns(q);
-            A.CallTo(() => system.SaveStream(fakeStream)).Returns(Identifier1);
+            A.CallTo(() => system.SaveStream(fakeStream)).Invokes(a => { Assert.True(a.GetArgument<Stream>(0).CanRead, "Stream should be opened to save it"); }).Returns(Identifier1);
 
             manager.Init();
 
