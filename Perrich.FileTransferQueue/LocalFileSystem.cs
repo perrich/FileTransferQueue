@@ -42,7 +42,7 @@ namespace Perrich.FileTransferQueue
         {
             try
             {
-                var fullPath = Convert.ToString(Guid.NewGuid().ToByteArray()) + ".stream"; // simulate a fullpath
+                var fullPath = Convert.ToString(Guid.NewGuid().ToString()) + ".stream"; // simulate a fullpath
                 var id = GetUniqueId(fullPath);
                 var path = Path.Combine(dirPath, id);
                 using (var fileStream = File.Create(path))

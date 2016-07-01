@@ -1,5 +1,7 @@
 ﻿using System.IO;
 using NUnit.Framework;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Perrich.FileTransferQueue.Test
 {
@@ -69,6 +71,21 @@ namespace Perrich.FileTransferQueue.Test
                     Assert.NotNull(stream);
                 }
                 Assert.True(File.Exists(identifier));
+            }
+        }
+
+        [Test]
+        public void ShouldCreateUniqueStreamIdentifier()
+        {
+            using (var srcStream = new FileStream(Filename, FileMode.Open, FileAccess.Read))
+            {
+                int number = 20;
+                var list = new List<string>();
+                foreach(int i in Enumerable.Range(1, number)){
+                    list.Add(system.SaveStream(srcStream));
+                };
+
+                Assert.AreEqual(list.Distinct().Count(), number);
             }
         }
 
